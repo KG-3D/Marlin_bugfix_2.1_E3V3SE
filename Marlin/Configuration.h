@@ -61,7 +61,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "Marlin, Creality, Kraplax & Navaismo" // Original author or contributor.
+#define STRING_CONFIG_H_AUTHOR "KG3D Marlin Bugfix Fork"
 //#define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 
 // @section machine
@@ -72,7 +72,7 @@
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
-#define CUSTOM_MACHINE_NAME "Ender-3 V3 SE"
+#define CUSTOM_MACHINE_NAME "Ender3V3SE"
 
 
 // @section serial
@@ -1770,7 +1770,7 @@
  */
 // #define NOZZLE_TO_PROBE_OFFSET { 10, 10, 0 }
 #if ENABLED(PLATFORM_OFFSET)
- #define NOZZLE_TO_PROBE_OFFSET { -24.25, -15, 0 }
+ #define NOZZLE_TO_PROBE_OFFSET { -23.3, -17.6 , 0 } // KG3D mod.
 #endif 
 // Enable and set to use a specific tool for probing. Disable to allow any tool.
 // #define PROBING_TOOL 0
@@ -1782,17 +1782,17 @@
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
-#define PROBING_MARGIN 3
+#define PROBING_MARGIN 4
 
 // X and Y axis travel speed between probes.
 // Leave undefined to use the average of the current XY homing feedrate.
-#define XY_PROBE_FEEDRATE    (160*60) // (mm/min)
+#define XY_PROBE_FEEDRATE    (200*60) // (mm/min)
 
 // Feedrate for the first approach when double-probing (MULTIPLE_PROBING == 2)
-#define Z_PROBE_FEEDRATE_FAST  (10*60) // (mm/min)
+#define Z_PROBE_FEEDRATE_FAST  (8*60) // (mm/min)
 
 // Feedrate for the "accurate" probe of each point
-#define Z_PROBE_FEEDRATE_SLOW (Z_PROBE_FEEDRATE_FAST / 2) // (mm/min)
+#define Z_PROBE_FEEDRATE_SLOW (2*60) // (mm/min)
 
 /**
  * Probe Activation Switch
@@ -1858,12 +1858,12 @@
  *     But: 'M851 Z+1' with a CLEARANCE of 2  =>  2mm from bed to nozzle.
  */
 #define Z_CLEARANCE_DEPLOY_PROBE   10 // (mm) Z Clearance for Deploy/Stow
-#define Z_CLEARANCE_BETWEEN_PROBES  3 // (mm) Z Clearance between probe points
-#define Z_CLEARANCE_MULTI_PROBE     3 // (mm) Z Clearance between multiple probes
+#define Z_CLEARANCE_BETWEEN_PROBES  4 // (mm) Z Clearance between probe points
+#define Z_CLEARANCE_MULTI_PROBE     2 // (mm) Z Clearance between multiple probes
 #define Z_PROBE_ERROR_TOLERANCE     3 // (mm) Tolerance for early trigger (<= -probe.offset.z + ZPET)
 #define Z_AFTER_PROBING            10 // (mm) Z position after probing is done
 
-#define Z_PROBE_LOW_POINT          -2 // (mm) Farthest distance below the trigger-point to go before stopping
+#define Z_PROBE_LOW_POINT          -1 // (mm) Farthest distance below the trigger-point to go before stopping
 
 // For M851 provide ranges for adjusting the X, Y, and Z probe offsets
 //#define PROBE_OFFSET_XMIN -50   // (mm)
@@ -1874,7 +1874,7 @@
 #define PROBE_OFFSET_ZMAX  10   // (mm)
 
 // Enable the M48 repeatability test to test probe accuracy
-//#define Z_MIN_PROBE_REPEATABILITY_TEST
+#define Z_MIN_PROBE_REPEATABILITY_TEST
 
 // Before deploy/stow pause for user confirmation
 //#define PAUSE_BEFORE_DEPLOY_STOW
@@ -1894,15 +1894,15 @@
   //#define WAIT_FOR_BED_HEATER     // Wait for bed to heat back up between probes (to improve accuracy)
   //#define WAIT_FOR_HOTEND         // Wait for hotend to heat back up between probes (to improve accuracy & prevent cold extrude)
 #endif
-//#define PROBING_FANS_OFF          // Turn fans off when probing
+#define PROBING_FANS_OFF          // Turn fans off when probing
 //#define PROBING_ESTEPPERS_OFF     // Turn all extruder steppers off when probing
 //#define PROBING_STEPPERS_OFF      // Turn all steppers off (unless needed to hold position) when probing (including extruders)
 //#define DELAY_BEFORE_PROBING 200  // (ms) To prevent vibrations from triggering piezo sensors
 
 // Require minimum nozzle and/or bed temperature for probing
-//#define PREHEAT_BEFORE_PROBING
+#define PREHEAT_BEFORE_PROBING
 #if ENABLED(PREHEAT_BEFORE_PROBING)
-  #define PROBING_NOZZLE_TEMP 120   // (°C) Only applies to E0 at this time
+  //#define PROBING_NOZZLE_TEMP 120   // (°C) Only applies to E0 at this time
   #define PROBING_BED_TEMP     50
 #endif
 
@@ -2022,29 +2022,16 @@
 
 #define XY_BED_MIN_ZERO 0
 // Travel limits (mm) after homing, corresponding to endstop positions.
-#if ENABLED(PLATFORM_OFFSET)  //Requires platform offset
-  // #define X_MIN_POS -10//-4        // +Offset left -Offset right
-  // #define Y_MIN_POS -22       //Platform moves forward rock_20220927  - Forward, +Backward 2.5
 
-  #if ENABLED(WUHAN_CHENGE_PLATFORM)  //Wuhan modified structure
-    #define X_MIN_POS    -13    //Platform moves left
-    #define  Y_MIN_POS   -15
-  #else
-    #define X_MIN_POS -11    //Platform moves left
-    #define  Y_MIN_POS   -18 //Platform moves forward rock_20220927
-  #endif
-#else   //
-#define X_MIN_POS -4
+//Min position
+#define X_MIN_POS -11
 #define Y_MIN_POS -17
-#endif
 #define Z_MIN_POS 0
-#if ENABLED(WUHAN_CHENGE_PLATFORM)  //Wuhan modified structure
-  #define X_MAX_POS X_BED_SIZE
-#else
-  #define X_MAX_POS X_BED_SIZE + 5
-#endif
-#define Y_MAX_POS Y_BED_SIZE + 7
-#define Z_MAX_POS 250  //Since the slicing software does not limit the height of 250mm, it is temporarily increased by 5mm.  Rock——20230105  
+
+//Max position
+#define X_MAX_POS X_BED_SIZE
+#define Y_MAX_POS Y_BED_SIZE
+#define Z_MAX_POS 250 
 
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
@@ -2123,7 +2110,7 @@
  * RAMPS-based boards use SERVO3_PIN for the first runout sensor.
  * For other boards you may need to define FIL_RUNOUT_PIN, FIL_RUNOUT2_PIN, etc.
  */
-#define FILAMENT_RUNOUT_SENSOR
+//#define FILAMENT_RUNOUT_SENSOR
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
   #define FIL_RUNOUT_ENABLED_DEFAULT true // Enable the sensor on startup. Override with M412 followed by M500.
   #define NUM_RUNOUT_SENSORS   1          // Number of sensors, up to one per extruder. Define a FIL_RUNOUT#_PIN for each.
@@ -2296,7 +2283,7 @@
 /**
  * Auto-leveling needs preheating
  */
-#define PREHEAT_BEFORE_LEVELING
+//#define PREHEAT_BEFORE_LEVELING
 #if ENABLED(PREHEAT_BEFORE_LEVELING)
   #define LEVELING_NOZZLE_TEMP 120   // (°C) Only applies to E0 at this time
   #define LEVELING_BED_TEMP     50
@@ -2336,7 +2323,7 @@
   /**
    * Enable the G26 Mesh Validation Pattern tool.
    */
-  #define G26_MESH_VALIDATION
+ // #define G26_MESH_VALIDATION
   #if ENABLED(G26_MESH_VALIDATION)
     #define MESH_TEST_NOZZLE_SIZE    0.4  // (mm) Diameter of primary nozzle.
     #define MESH_TEST_LAYER_HEIGHT   0.2  // (mm) Default layer height for G26.
@@ -2352,7 +2339,7 @@
 #if ANY(AUTO_BED_LEVELING_LINEAR, AUTO_BED_LEVELING_BILINEAR)
 
   // Set the number of grid points per dimension.
-  #define GRID_MAX_POINTS_X 6
+  #define GRID_MAX_POINTS_X 7
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
   // Probe along the Y axis, advancing X after each column
@@ -2368,7 +2355,7 @@
     // Subdivision of the grid by Catmull-Rom method.
     // Synthesizes intermediate points to produce a more detailed mesh.
     //
-    #define ABL_BILINEAR_SUBDIVISION
+    //define ABL_BILINEAR_SUBDIVISION
     #if ENABLED(ABL_BILINEAR_SUBDIVISION)
       // Number of subdivisions between probe points
       #define BILINEAR_SUBDIVISIONS 4
@@ -2514,7 +2501,7 @@
 #endif
 
 // Homing speeds (linear=mm/min, rotational=°/min)
-#define HOMING_FEEDRATE_MM_M { (50*60), (50*60), (12*60) }
+#define HOMING_FEEDRATE_MM_M { (80*60), (80*60), (2*60) }
 
 // Edit homing feedrates with M210 and MarlinUI menu items
 //#define EDITABLE_HOMING_FEEDRATE
@@ -2552,15 +2539,15 @@
  *    +-------------->X     +-------------->X     +-------------->Y
  *     XY_SKEW_FACTOR        XZ_SKEW_FACTOR        YZ_SKEW_FACTOR
  */
-// #define SKEW_CORRECTION
+#define SKEW_CORRECTION
 
 #if ENABLED(SKEW_CORRECTION)
   // Input all length measurements here:
-  #define XY_DIAG_AC 282.84
-  #define XY_DIAG_BD 282.84
-  #define XY_SIDE_AD 200.69
+  #define XY_DIAG_AC 142.02
+  #define XY_DIAG_BD 141.66
+  #define XY_SIDE_AD 100.34
 
-  // #define DWIN_SKEW_MENU     // Enable LCD Menu to Configure Skew Factor Parameters
+ #define DWIN_SKEW_MENU     // Enable LCD Menu to Configure Skew Factor Parameters
   
   #if ENABLED(DWIN_SKEW_MENU)
     extern float xyskew_d_ac;
@@ -2607,7 +2594,7 @@
  */
 #define EEPROM_SETTINGS     // Persistent storage with M500 and M501
 //#define DISABLE_M503        // Saves ~2700 bytes of flash. Disable for release!
-//#define EEPROM_CHITCHAT       // Give feedback on EEPROM commands. Disable to save flash.
+#define EEPROM_CHITCHAT       // Give feedback on EEPROM commands. Disable to save flash.
 #define EEPROM_BOOT_SILENT    // Keep M503 quiet and only give errors during first load
 #if ENABLED(EEPROM_SETTINGS)
   #define EEPROM_AUTO_INIT  // Init EEPROM automatically on any errors.
@@ -2645,15 +2632,15 @@
 //
 #define PREHEAT_1_LABEL       "PLA"
 #define PREHEAT_1_TEMP_HOTEND 200
-#define PREHEAT_1_TEMP_BED     60
+#define PREHEAT_1_TEMP_BED     50
 #define PREHEAT_1_TEMP_CHAMBER 35
-#define PREHEAT_1_FAN_SPEED    0//255 // Value from 0 to 255
+#define PREHEAT_1_FAN_SPEED    255 // Value from 0 to 255
 
-#define PREHEAT_2_LABEL       "TPU"
-#define PREHEAT_2_TEMP_HOTEND 230
-#define PREHEAT_2_TEMP_BED     70
+#define PREHEAT_2_LABEL       "ABS"
+#define PREHEAT_2_TEMP_HOTEND 220
+#define PREHEAT_2_TEMP_BED     90
 #define PREHEAT_2_TEMP_CHAMBER 35
-#define PREHEAT_2_FAN_SPEED    0//255 // Value from 0 to 255
+#define PREHEAT_2_FAN_SPEED    255 // Value from 0 to 255
 
 // #define EXTRA_PREHEAT_LABELS   // Enable LCD Menu to Configure 2 Extra Preheat Materials
 #if ENABLED(EXTRA_PREHEAT_LABELS)
@@ -2692,9 +2679,9 @@
   // Specify a park position as { X, Y, Z_raise }
   #define NOZZLE_PARK_POINT { (0), (0), 0 }
   // #define NOZZLE_PARK_MOVE          0   // Park motion: 0 = XY Move, 1 = X Only, 2 = Y Only, 3 = X before Y, 4 = Y before X
-  #define NOZZLE_PARK_Z_RAISE_MIN   5   // (mm) Always raise Z by at least this distance
-  #define NOZZLE_PARK_XY_FEEDRATE 100   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
-  #define NOZZLE_PARK_Z_FEEDRATE   15   // (mm/s) Z axis feedrate (not used for delta printers)
+  #define NOZZLE_PARK_Z_RAISE_MIN   8   // (mm) Always raise Z by at least this distance
+  #define NOZZLE_PARK_XY_FEEDRATE 120   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
+  #define NOZZLE_PARK_Z_FEEDRATE   12   // (mm/s) Z axis feedrate (not used for delta printers)
 #endif
 
 /**
@@ -2772,7 +2759,7 @@
   //#define NOZZLE_CLEAN_NO_Y
 
   // Require a minimum hotend temperature for cleaning
-  #define NOZZLE_CLEAN_MIN_TEMP 170
+  #define NOZZLE_CLEAN_MIN_TEMP 190
   //#define NOZZLE_CLEAN_HEATUP       // Heat up the nozzle instead of skipping wipe
 
   // Explicit wipe G-code script applies to a G12 with no arguments.
@@ -3003,7 +2990,7 @@
 // If you have a speaker that can produce tones, enable it here.
 // By default Marlin assumes you have a buzzer with a fixed frequency.
 //
-//#define SPEAKER
+#define SPEAKER
 
 //
 // The duration and frequency for the UI feedback sound.
