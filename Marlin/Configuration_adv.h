@@ -2472,7 +2472,7 @@
  *
  * See https://marlinfw.org/docs/features/lin_advance.html for full instructions.
  */
-//#define LIN_ADVANCE //KG3D mod. para usar FT_MOTION com fator K
+#define LIN_ADVANCE //KG3D mod. para usar FT_MOTION com fator K
 
 #if ANY(LIN_ADVANCE, FT_MOTION)
   #if ENABLED(DISTINCT_E_FACTORS)
