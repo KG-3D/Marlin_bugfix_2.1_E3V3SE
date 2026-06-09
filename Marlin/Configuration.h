@@ -2506,7 +2506,7 @@
  *    +-------------->X     +-------------->X     +-------------->Y
  *     XY_SKEW_FACTOR        XZ_SKEW_FACTOR        YZ_SKEW_FACTOR
  */
-#define SKEW_CORRECTION
+//#define SKEW_CORRECTION
 
 #if ENABLED(SKEW_CORRECTION)
   // Input all length measurements here:
@@ -2514,7 +2514,7 @@
   #define XY_DIAG_BD 282.84
   #define XY_SIDE_AD 200.69
 
-#define DWIN_SKEW_MENU     // Enable LCD Menu to Configure Skew Factor Parameters
+//#define DWIN_SKEW_MENU     // Enable LCD Menu to Configure Skew Factor Parameters
   
   #if ENABLED(DWIN_SKEW_MENU)
     extern float xyskew_d_ac;
